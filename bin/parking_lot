@@ -1,11 +1,68 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
+
+require './parking/parking_area'
+
+class ParkingLot
+
+  def initialize
+		@parking_area = nil
+	end
+
+  def get_commands
+	  if ARGV.length == 0
+	    while (input = gets.chomp) != 'exit'
+	     create_parking_lot(input)
+	 	  end
+	  else
+	    begin
+	      input = File.read(ARGV[0])
+	    rescue StandardError => file
+	      puts "Error: Unable to read the file #{ file }"
+	      return
+	    end
+	    begin
+	    	process_commands(input)
+	  	rescue StandardError => file
+	  		puts "Error processing input. Error - #{ file }"
+	  	end
+	  end
+	end
+
+	def process_commands(input)
+	  input.split("\n").each do |input|
+	    create_parking_lot(input)
+	  end
+	end
+
+	def create_parking_lot input
+		unless input == ""
+			input_data = input.split(/\s/)
+		    command = input_data[0]
+		    if  command == 'create_parking_lot'
+		      no_of_slots = input_data[1]
+		      @parking_area = ParkingArea.new(no_of_slots)
+		    else
+		      @parking_area.send(command, *([input_data[1], input_data[2]].compact))
+		    end
+		end
+	end
+
+end
+ParkingLot.new.get_commands
+
+
+
+
+
+
+
 # Add script to run program here.
 # Complete bin/setup so that after it is
 # run, bin/parking_lot can be used to launch
 # it.
 
 # This variable contains absolute path of this `parking_lot` script
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+# DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Use DIR variable above to pinpoint your jar/executable/main class
 # e.g.
