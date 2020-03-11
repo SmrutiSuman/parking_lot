@@ -1,4 +1,6 @@
-require 'spec_helper'
+require 'pry'
+require 'pry-nav'
+require_relative 'spec_helper'
 
 RSpec.describe 'End To End Suite' do
   describe "full scenarios" do
@@ -23,33 +25,18 @@ RSpec.describe 'End To End Suite' do
     end
 
     let(:expected) do
-      [
-          "Created a parking lot with 6 slots\n",
-          "Allocated slot number: 1\n",
-          "Allocated slot number: 2\n",
-          "Allocated slot number: 3\n",
-          "Allocated slot number: 4\n",
-          "Allocated slot number: 5\n",
-          "Allocated slot number: 6\n",
-          "Slot number 4 is free\n",
-          "Slot No.\t\t Registration No\t\t Color\n1\t KA-01-HH-1234\t White\n2\t KA-01-HH-9999\t White\n3\t KA-01-BB-0001\t Black\n5\t KA-01-HH-2701\t Blue\n6\t KA-01-HH-3141\t Black\n",
-          "Allocated slot number: 4\n",
-          "Sorry, parking lot is full\n",
-          "KA-01-HH-1234, KA-01-HH-9999, KA-01-P-333\n",
-          "1, 2, 4\n",
-          "6\n",
-          "Not found\n"
+      [   "Created a parking lot with 6 slots\n","Allocated slot number: 1\n","Allocated slot number: 2\n","Allocated slot number: 3\n","Allocated slot number: 4\n","Allocated slot number: 5\n","Allocated slot number: 6\n","Slot number 4 is free\n","Slot No.\tRegistration No\t Color\n1\t\t KA-01-HH-1234\t White\n2\t\t KA-01-HH-9999\t White\n3\t\t KA-01-BB-0001\t Black\n5\t\t KA-01-HH-2701\t Blue\n6\t\t KA-01-HH-3141\t Black\n","Allocated slot number: 4\n","Sorry, parking lot is full\n","KA-01-HH-1234, KA-01-HH-9999, KA-01-P-333\n","1, 2, 4\n","6\n","Not found\n"
       ]
     end
 
     it "input from file" do
-      pty = PTY.spawn("parking_lot #{File.join(File.dirname(__FILE__), '..', 'fixtures', 'file_input.txt')}")
+      pty = PTY.spawn("bin/parking_lot #{File.join(File.dirname(__FILE__), '..', 'fixtures', 'file_input.txt')}")
       print 'Testing file input: '
-      expect(fetch_stdout(pty)).to eq(expected.join(''))
+      expect(fetch_stdout(pty)).to eql(expected.join(''))
     end
 
     it "interactive input" do
-      pty = PTY.spawn("parking_lot")
+      pty = PTY.spawn("bin/parking_lot")
       print 'Testing interactive input: '
       commands.each_with_index do |cmd, index|
         print cmd

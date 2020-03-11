@@ -1,16 +1,17 @@
 #!/bin/sh
 
 # install ruby
-# sudo apt-get install ruby-full
+sudo apt-get install ruby-full
 
 # Set up development git remotes by git clone
-# git clone git@github.com:SmrutiSuman/parking_lot.git
+git clone git@github.com:SmrutiSuman/parking_lot.git
 
 # Set up Ruby dependencies
-# bundle install
+cd ./functional_spec
+bundle install
 
 #run test cases if environment test is given
-# bundle exec RAILS_ENV=test 
+rspec functional_spec/spec
 
 
 

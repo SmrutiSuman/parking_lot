@@ -17,6 +17,7 @@ class ParkingArea
   def park(registration_number, color)
     available_slot = self.find_available_slot
     if available_slot
+      raise "Can not park duplicate vehicle" if duplicate_vehicle(registration_number, color)
       available_slot.park(registration_number, color)
     else
       puts "Sorry, parking lot is full\n"
@@ -39,6 +40,12 @@ class ParkingArea
     end
   end
 
+  def duplicate_vehicle(registration_number, color)
+    @slots.find do |slot|
+      slot&.vehicle_registration_number == registration_number && slot&.vehicle_color == color
+    end
+  end
+
   def status
     puts "Slot No.\tRegistration No\t Color\n"
     @slots.each do | slot |
@@ -48,25 +55,26 @@ class ParkingArea
 
   def registration_numbers_for_cars_with_colour (color)
     cars = @slots.collect do |slot|
-            slot.vehicle_registration_number if slot.vehicle_color == color
+            slot.vehicle_registration_number if slot.vehicle_color&.downcase == color.downcase
           end
     print_result cars
   end
 
   def slot_numbers_for_cars_with_colour (color)
     cars = @slots.collect do |slot|
-            slot.id if slot.vehicle_color == color
+            slot.id if slot.vehicle_color&.downcase == color.downcase
           end
     print_result cars
   end
 
   def slot_number_for_registration_number (vehicle_number)
-    print_result ([] << @slots.find {|slot| slot.vehicle_registration_number == vehicle_number })
+    slot = @slots.find {|slot| slot.vehicle_registration_number == vehicle_number }
+    print_result ([slot&.id].compact)
   end
 
   def print_result cars
     if cars.compact.empty?
-      puts "No Cars Found"
+      puts "Not found"
     else
       puts cars.compact.join(', ')
     end

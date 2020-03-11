@@ -1,6 +1,8 @@
 require "bundler/setup"
 require "pty"
 require "timeout"
+require "pry"
+require "pry-nav"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -26,7 +28,7 @@ def fetch_stdout(pty)
   res = []
   while true
     begin
-      Timeout::timeout 0.5 do
+      Timeout::timeout 1.0 do
         res << stdout.readline
       end
     rescue EOFError, Errno::EIO, Timeout::Error
