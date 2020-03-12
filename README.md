@@ -1,4 +1,4 @@
-# parking_lot
+# Parking lot
 
 ## Setup
 * Unzip the zipped file
